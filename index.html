@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-database.js"></script>
+    <!-- <script src="list.js" defer></script> -->
+    <script src="script.js" defer></script>
+    <script src="confetti.js" defer></script>
+    <title>Sign In - Mr. Wang (2nd period)</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+    body {
+        margin:0;
+        padding:0;
+        width:100vw;
+        height:100vh;
+        background:white;
+        font-family: "Orbitron", sans-serif;
+    }
+
+    #end-Screen {
+        position:fixed;
+        width:100vw;
+        height:100vh;
+        max-width: 500px;
+        max-height: 800px;
+        min-height: 400px;
+        min-width: 500px;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        opacity: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color:rgb(90, 90, 90);
+        font-size: 25px;
+        font-weight: 900;
+    }
+
+    #info-Input {
+        width:calc(100vw - 50px);
+        max-width: 500px;
+        position:absolute;
+        top:50%;
+        left:50%;
+        transform:translate(-50%, -50%);
+        background:none;
+        border:none;
+        font-size: 25px;
+        text-align:center;
+        font-weight: 900;
+        color:rgb(90, 90, 90);
+        text-transform: uppercase;
+        transition: .5s;
+    }
+
+    @keyframes notCorrect {
+        0% {
+            left:50%;
+        }
+
+        20% {
+            left:calc(50% - 15px);
+            color: red;
+        }
+
+        40% {
+            left:calc(50% + 15px);
+        }
+
+        60% {
+            left:calc(50% - 7px);
+        }
+
+        80% {
+            left:calc(50% + 7px);
+            color: red;
+        }
+        
+        100% {
+            left:50%;
+            color:rgb(90, 90, 90);
+        }
+    }
+    
+    #info-Input::placeholder {
+        color:rgb(165, 165, 165);    
+    }
+
+    @media (min-width:499px) {
+        #text-Input {
+            position:fixed;
+            width:100vw;
+            height:fit-content;
+            max-width: 500px;
+            min-width: 500px;
+            min-height: 700px;
+            top:50%;
+            left:50%;
+            transform:translate(-50%, -50%);
+            /* opacity: 0; */
+        }
+
+        #enter-Button {
+            width:calc(100vw - 50px);
+            max-width: 350px;
+            position:absolute;
+            cursor: default;
+            bottom:0px;
+            left:50%;
+            transform:translate(-50%);
+            padding:15px 10px;
+            border-radius: 15px;
+            border:none;
+            background: rgb(60, 60, 60);
+            font-weight: 900;
+            color:white;
+            font-size: 20px;
+            opacity: 0.5;
+            transition: .5s;
+            text-transform: uppercase;
+        }
+    }
+
+    @media (max-width:500px) {
+        
+        #text-Input {
+            position:fixed;
+            width:100vw;
+            height:auto;
+            max-width: 500px;
+            min-width: 500px;
+            top:0px;
+            bottom:0px;
+            left:50%;
+            transform:translate(-50%);
+            /* opacity: 0; */
+        }
+        
+        #enter-Button {
+            width:calc(100vw - 50px);
+            max-width: 350px;
+            position:fixed;
+            cursor: default;
+            bottom:25px;
+            left:50%;
+            transform:translate(-50%);
+            padding:15px 10px;
+            border-radius: 15px;
+            border:none;
+            background: rgb(60, 60, 60);
+            font-weight: 900;
+            color:white;
+            font-size: 20px;
+            opacity: 0.5;
+            transition: .5s;
+            text-transform: uppercase;
+        }
+    }
+
+    #button-Text {
+        color:white;
+        transition: 0s;
+    }
+
+    #final-Text {
+        width:calc(100vw - 50px);
+        height:100px;
+        position:absolute;
+        text-align:center;
+        top:50%;
+        left:50%;
+        font-size: 25px;
+        color: rgb(90, 90, 90);
+        transform:translate(-50%, -50%);
+        z-index: -1;
+    }
+
+    #signed-In-At-Text {
+        width:calc(100vw - 50px);
+        height:100px;
+        position:absolute;
+        text-align:center;
+        top:50%;
+        left:50%;
+        font-size: 16px;
+        font-weight: 500;
+        color: rgb(160, 160, 160);
+        transform:translate(-50%, -50%);
+        z-index: -1;
+        opacity: 0;
+    }
+
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+    }
+
+    input, button:focus {
+        outline:none;
+    }
+
+    html {
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-tap-highlight-color: transparent;
+    }
+</style>
+
+<style>
+    canvas {
+      width: 100vw;
+      height: 100vh;
+    }
+</style>
+<body>
+    <div id="end-Screen">
+        <div id="final-Text">You Are Here!</div>
+        <div id="signed-In-At-Text">Signed In At 09:12:12</div>
+        <!-- <img src="https://picsum.photos/seed/picsum/500/500" id=""> -->
+        <canvas id="confetti"></canvas>
+    </div>
+
+    <div id="text-Input">
+        <input type="number" id="info-Input" placeholder="Student #" maxlength="20" onkeyup="checkLength()">
+        
+        <button id="enter-Button" onclick="code()">
+            <div id="button-Text">Enter</div>
+        </button>
+    </div>
+</body>
+</html>
