@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.21.0/firebase-database.js"></script>
+    <script src="list.js" defer></script>
+    <script src="teacherScript.js" defer></script>
+    <title>Attendence</title>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&display=swap');
+
+    body {
+        margin:0px;
+        padding:0px;
+        font-family: "Orbitron", sans-serif;
+    }
+
+    #todays-Date {
+        color:rgb(90, 90, 90);
+        font-size: 25px;
+        font-weight: 900;
+        /* font-family: Arial, Helvetica, sans-serif; */
+        position:absolute;
+        top:50px;
+        left:50%;
+        transform:translate(-50%);
+    }
+
+    #list {
+        width:calc(100vw - 50px);
+        position:absolute;
+        top:150px;
+        left:50%;
+        transform: translate(-50%);
+        display: flex;
+        flex-direction: column;
+        max-width: 600px;
+        border-radius: 10px;
+        overflow: hidden;
+        padding-bottom: 150px;
+    }
+
+    .student-Container {
+        color:rgb(90, 90, 90);
+        padding: 0px 15px;
+        font-weight: 600;
+        /* font-family: Arial, Helvetica, sans-serif; */
+        height:45px;
+        background:transparent;
+        width:calc(100% - 30px);
+        display:flex;
+        align-items: center;
+    }
+
+    .student-Container:nth-child(1) {
+        color:rgb(90, 90, 90);
+        padding: 0px 15px;
+        font-weight: 900;
+        border-bottom:1px solid rgb(90, 90, 90);
+        /* font-family: Arial, Helvetica, sans-serif; */
+        height:45px;
+        width:calc(100% - 30px);
+        display:flex;
+        align-items: center;
+    }
+
+    .student-Container:nth-child(2n) {
+        color:rgb(90, 90, 90);
+        padding: 0px 15px;
+        font-weight: 600;
+        background:rgb(250, 250, 250);
+        /* font-family: Arial, Helvetica, sans-serif; */
+        height:45px;
+        width:calc(100% - 30px);
+        display:flex;
+        align-items: center;
+    }
+
+    .student-Name {
+        margin-left: 20px;
+        width:calc(100% - 311px);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .student-Num {
+        margin-left: 8px;
+    }
+
+    .sign-In-Time {
+        margin-left: auto;
+    }
+
+    .circle {
+        border-radius: 100%;
+        border: 2px solid rgb(90, 90, 90);
+        width:10px;
+        height:10px;
+    }
+
+    .circle.here {
+        border-radius: 100%;
+        border: 2px solid rgb(90, 90, 90);
+        background: rgb(90, 90, 90);
+        width:10px;
+        height:10px;
+    }
+
+    .attendence {
+        margin-left: .5px;
+        margin-right: 1px;
+        width:11px;
+    }
+
+    .sign-In-Time-Title {
+        margin-right: 29px;
+    }
+
+    .student-Num-Title {
+        margin-left: auto;
+        margin-right: 113px;
+    }
+
+    #no-Students-Container {
+        width:100%;
+        height:35px;
+        display:flex;
+        justify-content: center;
+        align-items:center;
+    }
+
+    #no-Students {
+        color:rgb(90, 90, 90);
+        font-weight: 900;
+    }
+</style>
+<body>
+    <div id="todays-Date">10/20/2005</div>
+    <div id="list">
+        <div class="student-Container first">
+            <div class="attendence">A</div>
+            <div class="student-Name">Name</div>
+            <div class="student-Num-Title">Student#</div>
+            <div class="sign-In-Time-Title">Time</div>
+        </div>
+
+        <!-- <div id="no-Students-Container">
+            <div id="no-Students">No Students Yet</div>
+        </div> -->
+        <!-- <div class="student-Container">
+            <div class="circle"></div>
+            <div class="student-Name">Benjamin Burnell</div>
+            <div class="student-Num">342423985</div>
+            <div class="sign-In-Time">11:49:02</div>
+        </div>
+        
+        <div class="student-Container">
+            <div class="circle here"></div>
+            <div class="student-Name">Kirk Thomas</div>
+            <div class="student-Num">342453827</div>
+            <div class="sign-In-Time">11:49:24</div>
+        </div> -->
+    </div>
+</body>
+</html>

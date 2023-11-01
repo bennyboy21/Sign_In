@@ -17,8 +17,12 @@ var info = {
     "time":""
 };
 
+var students_Nums = []
+
 firebase.database().ref("studentInfo/studentNums").once('value', function(snapshot) {
-    students_Nums = snapshot.val()
+    if(snapshot.val() != undefined) {
+        students_Nums = snapshot.val()
+    }
 })
 
 day = new Date().getDate()
@@ -52,14 +56,76 @@ console.log(String(year))
 
 // })
 
+function load() {
+    const gifElement = document.getElementById('background-Gif-Img');
+    const gifElement2 = document.getElementById('my-Image');
+    var newURL = localStorage.getItem("gif_URL")
+    var studentNUM = localStorage.getItem("student_Num")
+
+    if(newURL != undefined) {
+        gifElement.src = newURL;
+        gifElement2.src = newURL;
+    } else {
+        fetchDailyGif();
+    }
+
+    if(studentNUM != undefined) {
+        var pathToCheck = firebase.database().ref("Days/" + today + "/" + info.student_num);
+
+        pathToCheck.once("value")
+        .then(function(snapshot) {
+            if (snapshot.exists()) {
+
+                snapshot.forEach(function(child) {
+                    if(child.val().student == Number(studentNUM)) {
+                        // document.getElementById("final-Text").style.marginTop = "-16px"
+                        document.getElementById("final-Text").innerText = "Already Signed In"
+                        // document.getElementById("signed-In-At-Text").style.marginTop = "16px"
+                        document.getElementById("signed-In-At-Text").style.opacity = "1"
+                        document.getElementById("signed-In-At-Text").innerText = "Signed In At " + child.val().time
+
+                        document.getElementById("text-Input").style.transition = ".5s"
+                        document.getElementById("text-Input").style.opacity = "0"
+                        setTimeout(function() {
+                            document.getElementById("background-Gif-Img").style.transition = ".5s"
+                            document.getElementById("background-Gif-Img").style.opacity = "1"
+                            document.getElementById("end-Screen").style.transition = ".5s"
+                            document.getElementById("end-Screen").style.opacity = "1"
+                        }, 500);
+
+                        setTimeout(function() {
+                            document.querySelector("body").style.transition = ".5s"
+                            document.querySelector("body").style.opacity = "1"
+                        }, 500)
+                    }
+                })
+            } else {
+                document.getElementById("info-Input").value = studentNUM
+                fetchDailyGif();
+                code()
+                setTimeout(function() {
+                    document.querySelector("body").style.transition = ".5s"
+                    document.querySelector("body").style.opacity = "1"
+                }, 500)
+            }
+        })
+        .catch(function(error) {
+            console.error("Error checking path:", error);
+        });
+    } else {
+        
+        setTimeout(function() {
+            document.querySelector("body").style.transition = ".5s"
+            document.querySelector("body").style.opacity = "1"
+        }, 500)
+    }
+}
+
 function code() {
     if(document.getElementById("info-Input").value != "") {
-        console.log(students_Nums.includes(Number(document.getElementById("info-Input").value)))
-        console.log(students_Nums)
-        console.log(document.getElementById("info-Input").value)
-
         if(students_Nums.includes(Number(document.getElementById("info-Input").value))) {
             info.student_num = document.getElementById("info-Input").value
+            localStorage.setItem("student_Num", info.student_num) 
             document.getElementById("text-Input").style.transition = ".5s"
             document.getElementById("text-Input").style.opacity = "0"
 
@@ -122,15 +188,18 @@ const here = function() {
                 pathToCheck.once("value")
                 .then(function(snapshot) {
                     if (snapshot.exists()) {
-                        document.getElementById("final-Text").style.marginTop = "-16px"
+                        // document.getElementById("final-Text").style.marginTop = "-16px"
                         document.getElementById("final-Text").innerText = "Already Signed In"
-                        document.getElementById("signed-In-At-Text").style.marginTop = "16px"
+                        // document.getElementById("signed-In-At-Text").style.marginTop = "16px"
                         document.getElementById("signed-In-At-Text").style.opacity = "1"
                         document.getElementById("signed-In-At-Text").innerText = "Signed In At " + snapshot.val().time
                         
                         document.getElementById("text-Input").style.transition = ".5s"
                         document.getElementById("text-Input").style.opacity = "0"
                         setTimeout(function() {
+                            document.getElementById("background-Gif-Img").style.transition = ".5s"
+                            document.getElementById("background-Gif-Img").style.opacity = "1"
+                            document.getElementById("end-Screen").style.transition = ".5s"
                             document.getElementById("end-Screen").style.opacity = "1"
                         }, 500);
                     } else {
@@ -141,6 +210,9 @@ const here = function() {
                             document.getElementById("text-Input").style.transition = ".5s"
                             document.getElementById("text-Input").style.opacity = "0"
                             setTimeout(function() {
+                                document.getElementById("background-Gif-Img").style.transition = ".5s"
+                                document.getElementById("background-Gif-Img").style.opacity = "1"
+                                document.getElementById("end-Screen").style.transition = ".5s"
                                 document.getElementById("end-Screen").style.opacity = "1"
 
                                 setTimeout(function() {
@@ -201,14 +273,14 @@ function getRandomImageUrl(dateString) {
 }
 
 // Get the current date in the format MMDDYYYY
-// const currentDate3 = new Date();
-// const month3 = String(currentDate3.getMonth() + 1).padStart(2, '0');
-// const day3 = String(currentDate3.getDate()).padStart(2, '0');
-// const year3 = String(currentDate3.getFullYear());
-// const dateString3 = month3 + day3 + year3;
+const currentDate3 = new Date();
+const month3 = String(currentDate3.getMonth() + 1).padStart(2, '0');
+const day3 = String(currentDate3.getDate()).padStart(2, '0');
+const year3 = String(currentDate3.getFullYear());
+const dateString3 = month3 + day3 + year3;
 
 
-// window.location = getRandomImageUrl(dateString3)
+// document.getElementById("my-Image").setAttribute("src", getRandomImageUrl(dateString3))
 // // Get the image element by its ID
 // const dailyImage = document.getElementById('dailyImage');
 
